@@ -37,7 +37,6 @@ bool Server::Initialize(IPEndPoint ip)
 		std::cerr << "Socket failed to create WHy?!\n";
 	} 
 	
-
 	return false;
 }
 
@@ -52,7 +51,7 @@ void Server::Frame()
 	}
 
 	this->use_fd = this->master_fd;
-
+		
 	if (WSAPoll(use_fd.data(), use_fd.size(), 1) > 0)
 	{
 #pragma region listener
@@ -65,7 +64,6 @@ void Server::Frame()
 			{
 				this->connections.emplace_back(TCPConnection(newConnectionSocket, newConnectionEndpoint));
 				TCPConnection& acceptedConnection = this->connections[this->connections.size() - 1];
-
 
 				WSAPOLLFD newConnectionFD = {};
 				newConnectionFD.fd = newConnectionSocket.GetHandle();
@@ -217,7 +215,7 @@ void Server::Frame()
 						}
 						else
 						{
-							break; //Added after tutorial was made 2019-06-24
+							break;
 						}
 					}
 				}

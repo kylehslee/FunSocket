@@ -28,7 +28,6 @@ namespace PNet
 					this->OnConnect();
 					return true;
 				}
-				
 			}
 			else
 			{
