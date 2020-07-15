@@ -51,9 +51,9 @@ void Server::Frame()
 	}
 
 	this->use_fd = this->master_fd;
-		
-	if (WSAPoll(use_fd.data(), use_fd.size(), 1) > 0)
+	if (WSAPoll(use_fd.data(), use_fd.size(), 100) > 0)
 	{
+		std::cout << "Hmmmmmmmmmmmm" << std::endl;
 #pragma region listener
 		WSAPOLLFD& listeningSocketFD = use_fd[0];
 		if (listeningSocketFD.revents & POLLRDNORM)
@@ -119,13 +119,11 @@ void Server::Frame()
 					bytesReceived = recv(use_fd[i].fd, (char*)&connection.buffer + connection.pm_incoming.currentPacketExtractionOffset, connection.pm_incoming.currentPacketSize - connection.pm_incoming.currentPacketExtractionOffset, 0);
 				}
 
-
 				if (bytesReceived == 0) //If connection was lost
 				{
 					CloseConnection(connectionIndex, "Recv==0");
 					continue;
 				}
-
 
 				if (bytesReceived == SOCKET_ERROR)
 				{

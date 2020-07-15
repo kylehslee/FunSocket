@@ -6,7 +6,7 @@ int main()
 	if (Network::Initialize())
 	{
 		MyServer server;
-		if (server.Initialize(IPEndPoint("0.0.0.0", 6112)))
+		if (server.Initialize(IPEndPoint("192.168.0.147", 6112)))
 		{
 			while (true)
 			{

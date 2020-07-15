@@ -13,7 +13,6 @@ namespace PNet
 			if (socket.SetBlocking(true) != PResult::P_Success)
 				return false;
 
-
 			std::cout << "Socket successfully created." << std::endl;
 			if (socket.Connect(ip) == PResult::P_Success)
 			{
@@ -149,6 +148,7 @@ namespace PNet
 
 				if (use_fd.revents & POLLWRNORM) //If normal data can be written without blocking
 				{
+
 					PacketManager& pm = connection.pm_outgoing;
 					while (pm.HasPendingPacket())
 					{

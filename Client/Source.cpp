@@ -8,7 +8,7 @@ int main()
 	if (Network::Initialize())
 	{
 		MyClient client;
-		if (client.Connect(IPEndPoint("::1", 6112)))
+		if (client.Connect(IPEndPoint("192.168.0.147", 6112)))
 		{
 			while (client.IsConnected())
 			{
