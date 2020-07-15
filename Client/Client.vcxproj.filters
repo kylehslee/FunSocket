@@ -26,8 +26,5 @@
     <ClInclude Include="MyClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sooo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
