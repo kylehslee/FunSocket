@@ -23,6 +23,7 @@ namespace PNet
 		std::vector<WSAPOLLFD> use_fd;
 
 	public:
+
 		bool Initialize(IPEndPoint ip);
 		void Frame();
 	};
