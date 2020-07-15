@@ -3,8 +3,6 @@
 
 bool Server::Initialize(IPEndPoint ip)
 {
-	std::cout << "SHIBAL22333" << std::endl;
-
 	this->master_fd.clear();
 	this->connections.clear();
 
@@ -51,7 +49,7 @@ void Server::Frame()
 			this->master_fd[i + 1].events = POLLRDNORM | POLLWRNORM;
 		}
 	}
-
+	
 	this->use_fd = this->master_fd;
 	if (WSAPoll(use_fd.data(), use_fd.size(), 100) > 0)
 	{
@@ -108,7 +106,6 @@ void Server::Frame()
 
 			if (use_fd[i].revents & POLLRDNORM)
 			{
-
 				int bytesReceived = 0;
 
 				if (connection.pm_incoming.currentTask == PacketManagerTask::ProcessPacketSize)
