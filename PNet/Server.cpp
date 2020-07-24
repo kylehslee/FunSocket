@@ -6,13 +6,13 @@ bool Server::Initialize(IPEndPoint ip)
 	this->master_fd.clear();
 	this->connections.clear();
 
-	std::cout << "Winsock successfully initialized!\n";
+	std::cout << "Winsock: O" << std::endl;
 
 	this->listeningSocket = Socket(ip.getIpversion());
 
 	if (this->listeningSocket.Create() == PResult::P_Success)
 	{
-		std::cout << "Socket created!\n";
+		std::cout << "Socket: O" << std::endl;
 
 		if (this->listeningSocket.Listen(ip) == PResult::P_Success)
 		{
@@ -23,18 +23,18 @@ bool Server::Initialize(IPEndPoint ip)
 
 			this->master_fd.push_back(listeningSocketFD);
 
-			std::cout << "Bind Success Listening on port 4790!" << std::endl;
+			std::cout << "Bind: O\nListening-Port: 6112" << std::endl;
 			return true;
 		}
 		else
 		{
-			std::cerr << "Fail to listen!" << std::endl;
+			std::cerr << "Listening: X" << std::endl;
 		}
 		this->listeningSocket.Close();
 	}
 	else
 	{
-		std::cerr << "Socket failed to create WHy?!\n";
+		std::cerr << "Socket: X" << std::endl;
 	} 
 	
 	return false;
@@ -49,18 +49,19 @@ void Server::Frame()
 			this->master_fd[i + 1].events = POLLRDNORM | POLLWRNORM;
 		}
 	}
-	
 	this->use_fd = this->master_fd;
-	if (WSAPoll(use_fd.data(), use_fd.size(), 100) > 0)
+	if (WSAPoll(use_fd.data(), use_fd.size(), 5000) > 0)
 	{
 #pragma region listener
 		WSAPOLLFD& listeningSocketFD = use_fd[0];
 		if (listeningSocketFD.revents & POLLRDNORM)
 		{
+			std::cout << "Listening Socket event happened!" << std::endl;
 			Socket newConnectionSocket;
 			IPEndPoint newConnectionEndpoint;
 			if (this->listeningSocket.Accept(newConnectionSocket, &newConnectionEndpoint) == PResult::P_Success)
 			{
+				std::cout << "Accept: O" << std::endl;
 				this->connections.emplace_back(TCPConnection(newConnectionSocket, newConnectionEndpoint));
 				TCPConnection& acceptedConnection = this->connections[this->connections.size() - 1];
 
@@ -71,12 +72,12 @@ void Server::Frame()
 
 				this->master_fd.push_back(newConnectionFD);
 
-				this->OnConnect(acceptedConnection);
+				//this->OnConnect(acceptedConnection);
 
 			}
 			else
 			{
-				std::cerr << "Fail to accept new connection" << std::endl;
+				std::cerr << "Accept: X" << std::endl;
 			}
 		}
 #pragma endregion Code specific	to the listening socket
@@ -85,6 +86,7 @@ void Server::Frame()
 		{
 			int connectionIndex = i - 1;
 			TCPConnection& connection = this->connections[connectionIndex];
+			//this->OnConnect(connection);
 
 			if (use_fd[i].revents & POLLERR)
 			{
@@ -112,6 +114,7 @@ void Server::Frame()
 				{
 					bytesReceived = recv(use_fd[i].fd, (char*)&connection.pm_incoming.currentPacketSize + connection.pm_incoming.currentPacketExtractionOffset, sizeof(uint16_t) - connection.pm_incoming.currentPacketExtractionOffset, 0);
 				}
+
 				else //Process Packet Contents
 				{
 					bytesReceived = recv(use_fd[i].fd, (char*)&connection.buffer + connection.pm_incoming.currentPacketExtractionOffset, connection.pm_incoming.currentPacketSize - connection.pm_incoming.currentPacketExtractionOffset, 0);
@@ -225,8 +228,9 @@ void Server::Frame()
 		{
 			while (this->connections[i].pm_incoming.HasPendingPacket())
 			{
+				std::string ip = this->connections[i].ToString();
 				std::shared_ptr<Packet> frontPacket = this->connections[i].pm_incoming.Retrieve();
-				if (!this->ProcessPacket(frontPacket))
+				if (!this->ProcessPacket(frontPacket, ip))
 				{
 					this->CloseConnection(i, "Failed to process incoming packet");
 					break;
@@ -259,8 +263,7 @@ void Server::CloseConnection(int connectionIndex, std::string reason)
 	connections.erase(connections.begin() + connectionIndex);
 }
 
-bool Server::ProcessPacket(std::shared_ptr<Packet> packet)
+bool Server::ProcessPacket(std::shared_ptr<Packet> packet, std::string& ip)
 {
-	std::cout << "Packet received with size: " << packet->buffer.size() << std::endl;
 	return true;
 }

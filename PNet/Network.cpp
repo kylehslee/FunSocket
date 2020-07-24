@@ -1,5 +1,4 @@
 #include "Network.h"
-#include <iostream>
 
 bool PNet::Network::Initialize()
 {

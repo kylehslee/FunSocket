@@ -27,7 +27,7 @@ namespace PNet
 				this->ip_bytes.resize(sizeof(ULONG));
 				memcpy(&this->ip_bytes[0], &addr.S_un.S_addr, sizeof(ULONG));
 				return;
-			}
+			}	
 		}
 
 		addrinfo hints = {};
@@ -188,6 +188,7 @@ namespace PNet
 
 		return addr;
 	}
+
 	void IPEndPoint::Print()
 	{
 		switch (this->ipversion)

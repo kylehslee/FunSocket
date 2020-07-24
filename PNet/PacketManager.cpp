@@ -29,4 +29,9 @@ namespace PNet
 		this->packets.pop();
 	}
 
+	void PacketManager::HowMany()
+	{
+		std::cout << this->packets.size() << std::endl;
+	}
+
 }

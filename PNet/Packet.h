@@ -15,7 +15,6 @@ namespace PNet
 	class Packet
 	{
 	private:
-		
 
 	public:
 		
