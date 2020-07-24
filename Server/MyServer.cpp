@@ -2,9 +2,9 @@
 
 void MyServer::OnConnect(TCPConnection& newConnection)
 {
-	std::cout << newConnection.ToString() << " - New connection accepted." << std::endl;
+	//std::cout << newConnection.ToString() << " - New connection accepted." << std::endl;
 	std::shared_ptr<Packet> welcomeMessagePacket = std::make_shared<Packet>(PacketType::PT_ChatMessage);
-	*welcomeMessagePacket << std::string("Welcome! Yo dude");
+	*welcomeMessagePacket << std::string("Welcome! Yo dude from server");
 	newConnection.pm_outgoing.Append(welcomeMessagePacket);
 }
 
@@ -24,7 +24,7 @@ void MyServer::OnDisconnect(TCPConnection& lostConnection, std::string reason)
 	}
 }
 
-bool MyServer::ProcessPacket(std::shared_ptr<Packet> packet)
+bool MyServer::ProcessPacket(std::shared_ptr<Packet> packet, std::string& ip)
 {
 	switch (packet->GetPacketType())
 	{
@@ -32,7 +32,7 @@ bool MyServer::ProcessPacket(std::shared_ptr<Packet> packet)
 	{
 		std::string chatmessage;
 		*packet >> chatmessage;
-		std::cout << "Chat Message: " << chatmessage << std::endl;
+		std::cout << ip << ": " << chatmessage << std::endl;
 		break;
 	}
 	case PacketType::PT_IntegerArray:

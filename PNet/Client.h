@@ -1,7 +1,7 @@
 #pragma once
  
 #include "TCPConnection.h"
-	
+
 namespace PNet
 {
 	class Client
@@ -16,6 +16,7 @@ namespace PNet
 		virtual void OnConnect();
 		virtual void OnConnectFail();
 		virtual void OnDisconnect(std::string reason);
+		virtual void SendText();
 		void CloseConnection(std::string reason);
 
 		TCPConnection connection;

@@ -75,7 +75,7 @@ namespace PNet
 		this->extractionOffset += stringSize;
 
 		return *this;
-	}
+	}	
 }
 
 

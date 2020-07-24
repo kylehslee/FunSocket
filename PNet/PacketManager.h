@@ -4,6 +4,7 @@
 
 #include <queue>
 #include <memory>
+#include <iostream>
 
 namespace PNet
 {
@@ -24,6 +25,8 @@ namespace PNet
 		void Append(std::shared_ptr<Packet> p);
 		std::shared_ptr<Packet> Retrieve();
 		void Pop();
+
+		void HowMany();
 
 		uint16_t currentPacketSize = 0;
 		int currentPacketExtractionOffset = 0;
